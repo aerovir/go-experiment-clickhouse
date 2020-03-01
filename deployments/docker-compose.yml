@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  app:
+    container_name: go-experiment-app
+    image: docker.pkg.github.com/i-go-go/docker-golang-hot-reload/devbox:1.13
+    depends_on:
+      - clickhouse
+    ports:
+      - "8080:8080"
+    volumes:
+      - ..:/app
+    working_dir: /app/cmd/server/
+
+  clickhouse:
+    container_name: go-experiment-clickhouse
+    image: yandex/clickhouse-server
+    ports:
+      - "8123:8123"   # HTTP client
+      - "9000:9000"   # Native client
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
